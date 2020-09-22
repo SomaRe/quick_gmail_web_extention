@@ -10,9 +10,10 @@ chrome.storage.local.get("quickgmails", function (result) {
             }
         }
         else{
-            box.innerHTML = "<p class='error'>There are no signed in Gmail accounts or This is your first time here <a class='error-url' href='https://mail.google.com/mail/'>Click here to start</a></p>"
+            box.innerHTML = "<p class='error'>There are no signed in Gmail accounts or This is your first time here <a class='error-url' data-url='https://mail.google.com/mail/'>Click here to start</a></p>"
         }
     });
+
 
     document.addEventListener('click',function(e) {
         chrome.tabs.create({url : e.target.getAttribute("data-url") } );        
