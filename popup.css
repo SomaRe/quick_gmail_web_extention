@@ -1,5 +1,6 @@
 html{
     height: 150px;
+    user-select: none;
 }
 
 a, a:hover, a:focus, a:active {
@@ -22,6 +23,8 @@ a, a:hover, a:focus, a:active {
 
 .urls:hover{
     box-shadow: grey 1px 1px 2px;
+    cursor: pointer;
+
 }
 
 
