@@ -1,33 +1,25 @@
 {
-    "name": "Quick Gmail",
-    "version": "0.0.1",
-    "manifest_version": 2,
-    "description": "A Chromium Extension to quickly jump to any gmail account available on your browser.",
-    "browser_action": {
-        "default_popup": "popup.html",
-        "default_icon" : {
+  "manifest_version": 3,
+  "name": "Quick Gmail",
+  "version": "0.0.1",
+  "description": "Instantly access multiple Gmail accounts from your browser toolbar.",
+  "host_permissions": [
+    "https://mail.google.com/*"
+  ],
+  "permissions": [
+    "storage"
+  ],
+  "action": {
+    "default_popup": "popup.html",
+    "default_icon" : {
           "16": "icons/quick-gmail-logo-16.png",
           "32": "icons/quick-gmail-logo-32.png",
+          "48": "icons/quick-gmail-logo-48.png",
           "64": "icons/quick-gmail-logo-64.png",
           "128": "icons/quick-gmail-logo-128.png"
         }
-    },
-    "content_scripts": [
-        {
-          "matches": ["*://mail.google.com/*"],
-          "css": ["background.css"],
-          "js": ["jquery.js","background.js"],
-          "run_at": "document_end"
-        }
-      ],
-      "permissions": [
-        "storage",
-        "tabs"
-      ],
-      "icons" : {
-        "16": "icons/quick-gmail-logo-16.png",
-          "32": "icons/quick-gmail-logo-32.png",
-          "64": "icons/quick-gmail-logo-64.png",
-          "128": "icons/quick-gmail-logo-128.png"
-      }
+  },
+  "background": {
+    "service_worker": "background.js"
+  }
 }

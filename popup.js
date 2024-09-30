@@ -1,22 +1,60 @@
+document.addEventListener("DOMContentLoaded", () => {
+  const contentDiv = document.getElementById("content");
+  const refreshButton = document.getElementById("refreshEmails");
+  refreshButton.onclick = fetchEmails;
 
+  chrome.runtime.sendMessage({ action: 'getEmails' }, (response) => {
+    if (response.success && response.data) {
+      displayEmails(response.data);
+    } else {
+      contentDiv.textContent = "No emails found. Click refresh to fetch emails.";
+    }
+  });
+});
 
+function fetchEmails() {
+  const contentDiv = document.getElementById("content");
+  contentDiv.textContent = "Fetching emails...";
+  
+  const refreshIcon = document.querySelector('.refresh-icon');
+  refreshIcon.classList.add('rotating');
 
-chrome.storage.local.get("quickgmails", function (result) {
-        console.log('Value currently is ' + JSON.stringify(result));
-        let box = document.getElementById("gmails-box");
-        if(result.quickgmails){
-            for (var i =0;i<result.quickgmails.length;i++){
-                    box.innerHTML = box.innerHTML + "<a class='urls' data-url="+result.quickgmails[i][1]+">" + result.quickgmails[i][0] + "</a>"
-            }
-        }
-        else{
-            box.innerHTML = "<p class='error'>There are no signed in Gmail accounts or This is your first time here <a class='error-url' data-url='https://mail.google.com/mail/'>Click here to start</a></p>"
-        }
-    });
+  chrome.runtime.sendMessage({ action: 'fetchEmails' }, (response) => {
+    refreshIcon.classList.remove('rotating');
+    if (response.success) {
+      displayEmails(response.data);
+    } else {
+      console.error('Error fetching emails:', response.error);
+      contentDiv.textContent = "Error fetching emails. Please try again.";
+    }
+  });
+}
 
+function displayEmails(data) {
+  const contentDiv = document.getElementById("content");
+  contentDiv.innerHTML = ''; // Clear previous content
 
-    document.addEventListener('click',function(e) {
-        chrome.tabs.create({url : e.target.getAttribute("data-url") } );        
-    });
+  if (data.length === 0) {
+    contentDiv.appendChild(document.createTextNode("No emails found."));
+    return;
+  }
 
+  data.forEach((xmlData) => {
+    const parser = new DOMParser();
+    const xmlDoc = parser.parseFromString(xmlData, "application/xml");
+    
+    const feed = xmlDoc.getElementsByTagName("feed")[0];
+    let title = feed.getElementsByTagName("title")[0].textContent;
+    title = title.split(' ')[title.split(' ').length - 1];
+    const link = feed.getElementsByTagName("link")[0].getAttribute("href");
 
+    const emailPill = document.createElement("div");
+    emailPill.className = "email-pill";
+    emailPill.textContent = title;
+    emailPill.onclick = () => {
+      window.open(link, '_blank');
+    };
+
+    contentDiv.appendChild(emailPill);
+  });
+}

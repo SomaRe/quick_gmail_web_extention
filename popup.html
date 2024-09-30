@@ -1,14 +1,106 @@
+<!DOCTYPE html>
 <html lang="en">
-    <head>
-        <meta charset="UTF-8" />
-        <title>Quick Gmail</title>
-        <link rel="stylesheet" href="popup.css">
-    </head>
-    <body>
-        <div id="gmails-box">
-        </div>
-        <p>*Mails will get automatically updated with all signed-in accounts everytime any gmail account is been opened</p>
-        <script src="jquery.js"></script>
-        <script src="popup.js"></script>
-    </body>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Quick Gmail</title>
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  <style>
+    body {
+      width: 400px;
+      padding: 15px;
+      font-family: Arial, sans-serif;
+      transition: background-color 0.3s, color 0.3s;
+    }
+
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+
+    h1 {
+      margin: 0;
+      font-size: 20px;
+    }
+
+    .refresh-button {
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 0;
+    }
+
+    .refresh-icon {
+      font-size: 24px;
+      transition: transform 0.5s, color 0.3s;
+    }
+
+    .refresh-icon.rotating {
+      animation: rotate 1s linear infinite;
+    }
+
+    @keyframes rotate {
+      100% { transform: rotate(360deg); }
+    }
+
+    .email-container {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .email-pill {
+      border-radius: 20px;
+      padding: 8px 15px;
+      font-size: 14px;
+      cursor: pointer;
+      transition: background-color 0.3s, color 0.3s;
+      border: 1px solid rgba(255, 99, 71, 0.2);
+    }
+
+    @media (prefers-color-scheme: light) {
+      body {
+        background-color: #ffffff;
+        color: #000000;
+      }
+      .email-pill {
+        background-color: #f1f3f4;
+      }
+      .email-pill:hover {
+        background-color: #e8eaed;
+      }
+      .refresh-icon {
+        color: #000000;
+      }
+    }
+
+    @media (prefers-color-scheme: dark) {
+      body {
+        background-color: #202124;
+        color: #ffffff;
+      }
+      .email-pill {
+        background-color: #3c4043;
+      }
+      .email-pill:hover {
+        background-color: #5f6368;
+      }
+      .refresh-icon {
+        color: #ffffff;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <h1>Quick Gmail</h1>
+    <button id="refreshEmails" class="refresh-button">
+      <span class="material-icons refresh-icon">refresh</span>
+    </button>
+  </div>
+  <div id="content" class="email-container"></div>
+  <script src="popup.js"></script>
+</body>
 </html>
